@@ -1,0 +1,60 @@
+---
+title: "Frogs GLM"
+author: "Jacob Wyco"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: TRUE
+    self_contained: TRUE
+    df_print: paged
+editor_options: 
+  markdown: 
+    wrap: sentence
+---
+
+![Figure 1.Frog*)](figures/frog.jpg)
+
+
+```{r Data input and cleanup, echo=FALSE}
+library(leaflet)
+library(hexbin)
+library(tidyverse)  
+library(knitr)
+library(dplyr)
+library(ggplot2)
+frogs <- read.csv("frogs.csv")
+```
+
+```{r ggplot, echo=FALSE}
+ggplot(frogs, aes(altitude, pres.abs)) +
+  geom_point(size=3) +
+  geom_smooth(method="glm", method.args=list(family="binomial"(link="logit"))) +
+  labs(title="GLM, binomial count (pres.abs)") +
+  ylab ("pres.abs") +
+  xlab ("altitude")
+ggsave("Figure_output/GLM.png")
+```
+
+```{r glm model}
+model_frogs <- glm(pres.abs ~ altitude, data=frogs, family=binomial)
+model_frogs
+```
+
+```{r arm }
+library(arm)
+x <- predict(model_frogs)
+y <- resid(model_frogs)
+binnedplot(x, y)
+```
+
+```{r coef}
+coef(model_frogs)
+```
+
+```{r confint}
+confint(model_frogs)
+```
+
+```{r summ}
+summary(model_frogs)
+```
