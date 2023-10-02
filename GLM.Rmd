@@ -14,8 +14,10 @@ editor_options:
 
 ![Figure 1.Frog*)](figures/frog.jpg)
 
+GLM of the given frog data. I looked at the relationship between prescence/absence and altitude. 
 
-```{r Data input and cleanup, echo=FALSE}
+
+```{r Data input and cleanup, echo=FALSE, message=FALSE}
 library(leaflet)
 library(hexbin)
 library(tidyverse)  
@@ -40,7 +42,7 @@ model_frogs <- glm(pres.abs ~ altitude, data=frogs, family=binomial)
 model_frogs
 ```
 
-```{r arm }
+```{r arm, message=FALSE}
 library(arm)
 x <- predict(model_frogs)
 y <- resid(model_frogs)
